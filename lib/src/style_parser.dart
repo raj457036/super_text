@@ -3,12 +3,12 @@ import 'style_applier.dart';
 import 'style_processor.dart';
 
 final RegExp _exp1 = RegExp(
-  r'\[([[\s*?[\w*\,?]+[:\w\,\s?]+?]*)\]\(([\w\s]+)\)',
+  r'\[([[\s*?[\w*\,?]+[:\w\,\s?]+?]*)\]\(([\w\s.!=+-]+)\)',
   multiLine: true,
 );
 
 final RegExp _exp2 = RegExp(
-  r'\[([[\s*?[\w*\,?]+[:\w\,\s?]+?]*)\]\(([\w\s\W\S]+)\)',
+  r'\[([[\s*?[\w*\,?]+[:\w\,\s?]+?]*)\]\(([\w\s\W\S.!=+-]+)\)',
   multiLine: true,
 );
 

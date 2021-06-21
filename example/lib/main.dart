@@ -61,9 +61,10 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final text = "[ws:20, color:green, underline](Hello [bold](World) Amazing "
-        "[color:red](Game 1 [bold,color:blue](Game [color:green](2)) "
-        "happy day) fox [color:bold](Check Trixk) sdfasdfs";
+    final text =
+        "[ws:20, color:green, underline](This text is [bold](World) styled "
+        "[color:red](by using [bold,color:blue](SText [color:green](Widget.)) "
+        "Its Easy) you can [color:bold](try) this example.";
     return Scaffold(
       body: Center(
         child: Column(
