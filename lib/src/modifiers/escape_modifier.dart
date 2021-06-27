@@ -1,8 +1,8 @@
-import '../../super_text.dart';
+import '../super_text_style.dart';
 
-/// A [SuperTextStyle] that helps in escaping characters in
-/// [SText] widget.
 class EscapeModifiers extends SuperTextStyle {
+  /// A [SuperTextStyle] that helps in escaping characters in
+  /// [SText] widget.
   EscapeModifiers({Map<String, String> customEscapes = const {}})
       : super(
           transform: (source, arg) {

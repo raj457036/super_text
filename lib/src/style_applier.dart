@@ -54,7 +54,7 @@ class StyleApplier {
       }
 
       if (sts?.recognizer != null)
-        winnerGesture ??= sts?.recognizer!(style.modifier);
+        winnerGesture = sts?.recognizer!(style.modifier);
       winnerCursor ??= sts?.mouseCursor;
 
       if (sts?.onEnter != null) {

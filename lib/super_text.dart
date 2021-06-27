@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 export 'src/super_text_style_provider.dart';
 export 'src/super_text_style.dart';
 export 'src/modifiers/escape_modifier.dart';
+export 'src/modifiers/hyperlink_modifier.dart';
 
 class SText extends StatelessWidget {
   /// The text to display.

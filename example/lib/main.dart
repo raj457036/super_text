@@ -60,6 +60,10 @@ class MyApp extends StatelessWidget {
       "escapes": EscapeModifiers(customEscapes: {
         "smiley": '🙂',
       }),
+      "href": HyperlinkModifier({
+        "sample": () =>
+            print("hello world :: open a web page with this tap..."),
+      }),
     };
   }
 }
@@ -69,7 +73,7 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final iString = "[color: green](SText [bold](Widget))";
+    final iString = "[color: green]([href:sample](SText [bold](Widget)))";
     final text =
         "[italic, escapes](This text is &ob; styled by $iString, you can &cb; &smiley;  [underline](underline text), or"
         " [color:red](Change Color of text) or [ escapes, transform:uc, ](just create your"
