@@ -8,6 +8,7 @@ class SuperTextStyler {
   final void Function(PointerEnterEvent)? onEnter;
   final void Function(PointerExitEvent)? onExit;
   final String? semanticsLabel;
+  final String Function(String source)? transform;
 
   SuperTextStyler({
     this.textStyle,
@@ -16,5 +17,6 @@ class SuperTextStyler {
     this.onEnter,
     this.onExit,
     this.semanticsLabel,
+    this.transform,
   });
 }

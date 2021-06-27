@@ -1,14 +1,15 @@
 import 'package:equatable/equatable.dart';
+
 import 'style_applier.dart';
 import 'style_processor.dart';
 
 final RegExp _exp1 = RegExp(
-  r'\[([[\s*?[\w*\,?]+[:\w\,\s?]+?]*)\]\(([\w\s.!=+-]+)\)',
+  r'\[([[\s*?[\w*\,?]+[:\w\,\s?]+?]*)\]\(([\w\s!:\\.{}$&?><,"/+=-_;\*-_+=%$#@!~`^/|]+)\)',
   multiLine: true,
 );
 
 final RegExp _exp2 = RegExp(
-  r'\[([[\s*?[\w*\,?]+[:\w\,\s?]+?]*)\]\(([\w\s\W\S.!=+-]+)\)',
+  r'\[([[\s*?[\w*\,?]+[:\w\,\s?]+?]*)\]\(([\w\s\W\S]+)\)',
   multiLine: true,
 );
 
@@ -88,11 +89,9 @@ class MultiStyleParser {
 
   MultiStyleParser clean() {
     var sample = "[null]($text)";
-    final _exp = RegExp(r'\)\)');
+    final _exp = RegExp(r'\)');
 
-    while (_exp.hasMatch(sample)) {
-      sample = sample.replaceAll(_exp, ") )");
-    }
+    sample = sample.replaceAll(_exp, " )");
     return MultiStyleParser(sample);
   }
 

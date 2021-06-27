@@ -52,6 +52,14 @@ class MyApp extends StatelessWidget {
           decoration: TextDecoration.underline,
         ),
       ),
+      "italic": SuperTextStyle(
+        builder: (arg) => TextStyle(
+          fontStyle: FontStyle.italic,
+        ),
+      ),
+      "escapes": EscapeModifiers(customEscapes: {
+        "smiley": '🙂',
+      }),
     };
   }
 }
@@ -61,30 +69,69 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final iString = "[color: green](SText [bold](Widget))";
     final text =
-        "[ws:20, color:green, underline](This text is [bold](World) styled "
-        "[color:red](by using [bold,color:blue](SText [color:green](Widget.)) "
-        "Its Easy) you can [color:bold](try) this example.";
+        "[italic, escapes](This text is &ob; styled by $iString, you can &cb; &smiley;  [underline](underline text), or"
+        " [color:red](Change Color of text) or [ escapes, transform:uc, ](just create your"
+        " own stylesheet &smiley; ))";
+
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(text),
-            SText(
-              text,
-              selectable: true,
-              styleSheet: {
-                "ws": SuperTextStyle(
-                  builder: (arg) => TextStyle(
-                    // fontWeight: FontWeight.w100,
-                    wordSpacing: double.parse(arg ?? "1"),
-                    color: Colors.lightBlue,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              SText("[bold](Normal Text)"),
+              SizedBox(height: 10),
+              Text(text),
+              SizedBox(height: 10),
+              SText("[bold, color: red](SText)"),
+              SizedBox(height: 10),
+              SText(
+                text,
+                benchmarkSpeed: true,
+                styleSheet: {
+                  "transform": SuperTextStyle(
+                    transform: (source, arg) {
+                      switch (arg) {
+                        case "uc":
+                          return source.toUpperCase();
+                        case "lc":
+                          return source.toLowerCase();
+                        default:
+                          return source;
+                      }
+                    },
                   ),
-                )
-              },
-            ),
-          ],
+                },
+                textAlign: TextAlign.center,
+              ),
+              Divider(),
+              SizedBox(height: 10),
+              SText("[bold, color: green](SelectableSText)"),
+              SizedBox(height: 10),
+              SelectableSText(
+                text,
+                benchmarkSpeed: true,
+                styleSheet: {
+                  "transform": SuperTextStyle(
+                    transform: (source, arg) {
+                      switch (arg) {
+                        case "uc":
+                          return source.toUpperCase();
+                        case "lc":
+                          return source.toLowerCase();
+                        default:
+                          return source;
+                      }
+                    },
+                  ),
+                },
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
       ),
     );

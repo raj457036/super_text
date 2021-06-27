@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 
 class StyleApplier {
   final List<StyleToken> styleTokens;
-  final String sample;
+  String sample;
   int start;
   int end;
   final List<StyleApplier> childrens;
@@ -38,13 +38,23 @@ class StyleApplier {
     GestureRecognizer? winnerGesture;
     MouseCursor? winnerCursor;
     String? semmanticLabel;
-    List<void Function(PointerEnterEvent)?> allOnEnter = [];
-    List<void Function(PointerExitEvent)?> allOnExit = [];
+
+    final allOnEnter = <void Function(PointerEnterEvent)?>[];
+    final allOnExit = <void Function(PointerExitEvent)?>[];
+    final _transformers = <String Function(String source)?>[];
 
     for (var style in styleTokens) {
       final sts = styleSheet[style.code];
-      _style = _style.merge(sts?.builder(style.modifier));
-      winnerGesture ??= sts?.recognizer;
+
+      if (sts?.builder != null)
+        _style = _style.merge(sts?.builder!(style.modifier));
+
+      if (sts?.transform != null) {
+        _transformers.add((_) => sts!.transform!(_, style.modifier));
+      }
+
+      if (sts?.recognizer != null)
+        winnerGesture ??= sts?.recognizer!(style.modifier);
       winnerCursor ??= sts?.mouseCursor;
 
       if (sts?.onEnter != null) {
@@ -63,25 +73,39 @@ class StyleApplier {
       textStyle: _style,
       recognizer: winnerGesture,
       mouseCursor: winnerCursor,
-      onEnter: (_) => allOnEnter.forEach((element) => element!(_)),
+      onEnter: (_) => allOnEnter.reversed.forEach((element) => element!(_)),
       onExit: (_) => allOnExit.forEach((element) => element!(_)),
+      transform: (source) => _applyTransform(source, _transformers),
       semanticsLabel: semmanticLabel,
     );
+  }
+
+  _applyTransform(
+    String source,
+    List<String Function(String)?> transformers,
+  ) {
+    for (var transformer in transformers) {
+      if (transformer == null) continue;
+      source = transformer(source);
+    }
+
+    return source;
   }
 
   TextSpan toTextSpans(
     BuildContext context, {
     Map<String, SuperTextStyle> extraStyle = const {},
   }) {
-    final styleSheet = <String, SuperTextStyle>{
-      ...extraStyle,
-      ...?SuperTextStyleProvider.of(context)?.data,
-    };
+    final styleSheet = {...extraStyle};
+
+    styleSheet.addAll(SuperTextStyleProvider.of(context)?.data ?? const {});
 
     if (childrens.isEmpty) {
       final style = _mergedStyles(styleSheet);
+      final transformed =
+          style?.transform != null ? style?.transform!(sample) : sample;
       return TextSpan(
-        text: sample,
+        text: transformed,
         style: style?.textStyle,
         recognizer: style?.recognizer,
         onEnter: style?.onEnter,
@@ -102,10 +126,11 @@ class StyleApplier {
 
       if (index == 0 && child.start != lastCharIndex) {
         final _text = sample.substring(lastCharIndex, child.start);
-
+        final transformed =
+            style?.transform != null ? style?.transform!(_text) : _text;
         spans.add(
           TextSpan(
-            text: _text,
+            text: transformed,
             style: style?.textStyle,
             recognizer: style?.recognizer,
             onEnter: style?.onEnter,
@@ -120,10 +145,11 @@ class StyleApplier {
 
       if (child.start != lastCharIndex) {
         final _text = sample.substring(lastCharIndex, child.start);
-
+        final transformed =
+            style?.transform != null ? style?.transform!(_text) : _text;
         spans.add(
           TextSpan(
-            text: _text,
+            text: transformed,
             style: style?.textStyle,
             recognizer: style?.recognizer,
             onEnter: style?.onEnter,
@@ -137,17 +163,19 @@ class StyleApplier {
       }
 
       if (child.childrens.isNotEmpty) {
-        spans.add(child.toTextSpans(context));
+        spans.add(child.toTextSpans(context, extraStyle: extraStyle));
         lastCharIndex = child.end;
         index++;
         continue;
       }
 
       final cstyle = child._mergedStyles(styleSheet);
-
+      final transformed = cstyle?.transform != null
+          ? cstyle?.transform!(child.sample)
+          : child.sample;
       spans.add(
         TextSpan(
-          text: child.sample,
+          text: transformed,
           style: cstyle?.textStyle,
           recognizer: cstyle?.recognizer,
           onEnter: cstyle?.onEnter,
@@ -164,10 +192,11 @@ class StyleApplier {
 
     if (lastCharIndex != sample.length - 1) {
       final _text = sample.substring(lastCharIndex, sample.length - 1);
-
+      final transformed =
+          style?.transform != null ? style?.transform!(_text) : _text;
       spans.add(
         TextSpan(
-          text: _text,
+          text: transformed,
           style: style?.textStyle,
           recognizer: style?.recognizer,
           onEnter: style?.onEnter,
