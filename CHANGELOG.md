@@ -1,3 +1,6 @@
+## 0.1.1
+* updated readme
+
 ## 0.1.0
 
 * **SText** with stylesheet 
