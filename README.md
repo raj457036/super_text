@@ -1,11 +1,12 @@
 # Super Text
 
-A powerful yet easy to user and understant plugin to style text effectively
+A powerful yet easy to use plugin to style text effectively
 and effeciently in Flutter.
 
 <hr>
 
-<img width="620" src="./screenshot.png" alt="Screenshot">
+<img width="620" src="./ss1.png" alt="Result">
+Read this document to learn more.
 
 <hr>
 
@@ -31,23 +32,47 @@ dependencies:
 
 ```
 
+## Provide Style Sheet for SText
 
+### SuperTextStyleProvider
+it provides style defination to SText widget
 
+#### Example:
 ```dart
-import 'package:flutter/material.dart';
-import 'package:super_text/super_text.dart';
+  final styleSheet = {
+    "bold": SuperTextStyle(
+      builder: (_) => TextStyle(
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+    "color": SuperTextStyle(
+      builder: (arg) {
+        Color color;
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
+        switch (arg) {
+          case "blue":
+            color = Colors.blue;
+            break;
+          default:
+            color = Colors.black;
+        }
+        return TextStyle(
+          color: color,
+        );
+      },
+    ),
+    "href": HyperlinkModifier({
+      "open_link": (_) => print("Yooo, opening a web page"),
+    }),
+  }
   Widget build(BuildContext context) {
     return SuperTextStyleProvider(
-      data: getStyleSheet(),
+      data: {
+        ...styleSheet,
+        "style": MaterialTextThemeModifier(context),
+      },
       child: MaterialApp(
-        title: 'Flutter Demo',
+        title: 'Super Text Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
@@ -55,119 +80,36 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+```
 
-  Map<String, SuperTextStyle> getStyleSheet() {
-    return {
-      "bold": SuperTextStyle(
-        builder: (_) => TextStyle(fontWeight: FontWeight.bold),
-      ),
-      "color": SuperTextStyle(
-        builder: (arg) {
-          Color color;
+### Use SText or SelectableSText
 
-          switch (arg) {
-            case "blue":
-              color = Colors.blue;
-              break;
-            case "red":
-              color = Colors.red;
-              break;
-            case "green":
-              color = Colors.green;
-              break;
-            default:
-              color = Colors.black;
-          }
-          return TextStyle(
-            color: color,
-          );
-        },
-      ),
-      "underline": SuperTextStyle(
-        builder: (arg) => TextStyle(
-          decoration: TextDecoration.underline,
-        ),
-      ),
-      "italic": SuperTextStyle(
-        builder: (arg) => TextStyle(
-          fontStyle: FontStyle.italic,
-        ),
-      ),
-      "escapes": EscapeModifiers(customEscapes: {
-        "smiley": '🙂',
-      }),
-    };
-  }
-}
 
-class Home extends StatelessWidget {
-  const Home({Key? key}) : super(key: key);
+```dart
+import 'package:flutter/material.dart';
+import 'package:super_text/super_text.dart';
+
+class ParagraphWithSuperText extends StatelessWidget {
+  const ParagraphWithSuperText({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final iString = "[color: green](SText [bold](Widget))";
-    final text =
-        "[italic, escapes](This text is &ob; styled by $iString, you can &cb; &smiley;  [underline](underline text), or"
-        " [color:red](Change Color of text) or [ escapes, transform:uc, ](just create your"
-        " own stylesheet &smiley; ))";
-
-    return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SText("[bold](Normal Text)"),
-              SizedBox(height: 10),
-              Text(text),
-              SizedBox(height: 10),
-              SText("[bold, color: red](SText)"),
-              SizedBox(height: 10),
-              SText(
-                text,
-                benchmarkSpeed: true,
-                styleSheet: {
-                  "transform": SuperTextStyle(
-                    transform: (source, arg) {
-                      switch (arg) {
-                        case "uc":
-                          return source.toUpperCase();
-                        case "lc":
-                          return source.toLowerCase();
-                        default:
-                          return source;
-                      }
-                    },
-                  ),
-                },
-                textAlign: TextAlign.center,
-              ),
-              Divider(),
-              SizedBox(height: 10),
-              SText("[bold, color: green](SelectableSText)"),
-              SizedBox(height: 10),
-              SelectableSText(
-                text,
-                benchmarkSpeed: true,
-                styleSheet: {
-                  "transform": SuperTextStyle(
-                    transform: (source, arg) {
-                      switch (arg) {
-                        case "uc":
-                          return source.toUpperCase();
-                        case "lc":
-                          return source.toLowerCase();
-                        default:
-                          return source;
-                      }
-                    },
-                  ),
-                },
-                textAlign: TextAlign.center,
-              ),
-            ],
-          ),
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SText("[style:headline3](Super Text)"),
+            SizedBox(height: 20.0),
+            SelectableSText(
+              "[bold](Note): There is a way to download a custom font"
+              " along with a webpage, to allow you to customize your "
+              "font usage in any way you want: [bold](web fonts). This is a little "
+              "bit more complex, and we will discuss it in a [href:open_link, color:black](separate "
+              "article) later on in the module.",
+            ),
+          ],
         ),
       ),
     );
@@ -176,7 +118,10 @@ class Home extends StatelessWidget {
 
 ```
 
+### Result
 
+<img width="620" src="./ss1.png" alt="Result">
 
+<hr/>
 
-
+### Thanks
