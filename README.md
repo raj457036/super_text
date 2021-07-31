@@ -50,8 +50,8 @@ it provides style defination to SText widget
         Color color;
 
         switch (arg) {
-          case "blue":
-            color = Colors.blue;
+          case "red":
+            color = Colors.red;
             break;
           default:
             color = Colors.black;
@@ -61,6 +61,7 @@ it provides style defination to SText widget
         );
       },
     ),
+    /// a built in modifier
     "href": HyperlinkModifier({
       "open_link": (_) => print("Yooo, opening a web page"),
     }),
@@ -121,6 +122,28 @@ class ParagraphWithSuperText extends StatelessWidget {
 ### Result
 
 <img width="620" src="./ss1.png" alt="Result">
+
+<hr/>
+
+
+### Available Modifiers
+see example folder to learn how to use inbuilt modifiers
+
+
+- **MaterialTextThemeModifier** for material text themes style
+  ```dart
+  SText("[style:headline1](Some Text in H1 style.))
+  ```
+- **EscapeModifiers** for escaping characters
+  ```dart
+  SText("[escapes](&ob; What&quote;s up? &cb;)")
+
+  /// results -> "( What's up? )"
+  ```
+- **HyperlinkModifier** for clickable text
+  ```dart
+  SText("This one is a [href:open_link, color:red](separate article) to know more.")
+  ```
 
 <hr/>
 
