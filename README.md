@@ -5,7 +5,7 @@ and effeciently in Flutter.
 
 <hr>
 
-<img width="620" src="./ss1.png" alt="Result">
+<img width="620" src="https://github.com/raj457036/super_text/raw/master/ss1.png" alt="Result">
 Read this document to learn more.
 
 <hr>
@@ -121,7 +121,7 @@ class ParagraphWithSuperText extends StatelessWidget {
 
 ### Result
 
-<img width="620" src="./ss1.png" alt="Result">
+<img width="620" src="https://github.com/raj457036/super_text/raw/master/ss1.png" alt="Result">
 
 <hr/>
 
